@@ -119,6 +119,12 @@ form button:hover{
     margin-bottom: 1.2875em; /* 20.6px */
 }
 
+.img{
+    width: 99px;
+    height: 147.4px;
+    border-radius: 2.3px;
+}
+
 .info{
     margin-left: 1.3125em; /* 21px */
 }
