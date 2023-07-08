@@ -18,7 +18,7 @@ body{
 }
 
 header{
-    border-radius: 0.625em; /* 10px */
+    border-radius: 0.625em 0.625em 0 0; /* 10px */
     color: white;
     display: flex;
     align-items: center;
