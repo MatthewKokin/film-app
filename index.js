@@ -1,8 +1,12 @@
 ({ plugins: ['jsdom-quokka-plugin'] })
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
+console.log(uuidv4())
 
 const Input = document.getElementById("search")
 const searchBtn = document.getElementById("searchbtn")
 let renderHTML = ``
+let watchListHtml = ""
+let watchlistAraay = []
 
 searchBtn.addEventListener("click", function (e) {
     e.preventDefault()
@@ -23,13 +27,36 @@ searchBtn.addEventListener("click", function (e) {
         })
 })
 
+
+document.getElementsByClassName("render")[0].addEventListener("click", function(e){
+    if(e.target.id === "btn") {
+        console.log(e.target.dataset.uuid)
+        let uuidToRemove = e.target.dataset.uuid; // get the uuid from the event target
+        let elementToRemove = document.querySelector(`.film[data-uuid="${uuidToRemove}"]`)
+        watchlistAraay.push(elementToRemove.innerHTML)
+        console.log(watchlistAraay)
+        elementToRemove.remove(); // remove the element from the DOM
+        renderWishList()
+    }
+})
+
+function renderWishList(){
+    let watchListElement = document.getElementById("w");
+    if(watchListElement) { // Check if the element exists
+        watchListElement.innerHTML = watchlistAraay.join('');
+    }
+}
+
+//trying to render saved films to other page
+
+
 function render(film) {
     fetch(`http://www.omdbapi.com/?apikey=8b639bc0&t=${film}`)
         .then(res => res.json())
         .then(filmData => {
-            console.log(filmData)
+            let filmId = uuidv4()
             renderHTML += `
-    <div class="film">
+    <div class="film" data-uuid="${filmId}">
         <img src="${filmData.Poster !== 'N/A' ? filmData.Poster : '/images/no-image.jpeg'}" class="img">
             <div class="info">
                 <div class="head">
@@ -40,9 +67,9 @@ function render(film) {
                 <div class="discription">
                     <p>${filmData.Runtime}</p>
                     <p class="genre">${filmData.Genre}</p>
-                    <div class="watchlist">
+                    <div class="watchlist" id="watchlist">
                         <img src="/images/watchlist.png">
-                        <p>Watchlist</p>
+                        <p id="btn" data-uuid="${filmId}">Watchlist</p>
                     </div>
                 </div>
                 <div class="summary">
@@ -54,8 +81,3 @@ function render(film) {
         })
 }
 
-// fetch("http://www.omdbapi.com/?apikey=8b639bc0&t=Blade-Runner")
-//         .then(res => res.json())
-//         .then(data => console.log(data))
-
-// Need to figure out why HTML is not rendered... -_-
