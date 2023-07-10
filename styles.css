@@ -131,8 +131,6 @@ form button:hover{
 
 .head{
     display: flex;
-    height: 1.25em; /* 20px */
-    justify-content: start;
     align-items: center;
 }
 
@@ -141,6 +139,8 @@ form button:hover{
     font-weight: 500;
     margin-right: 0.5em; /* 8px */
     max-width: 18.75em; /* 300px */
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .head image{

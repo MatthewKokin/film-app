@@ -1,36 +1,39 @@
-({plugins: ['jsdom-quokka-plugin']})
+({ plugins: ['jsdom-quokka-plugin'] })
 
 const Input = document.getElementById("search")
 const searchBtn = document.getElementById("searchbtn")
 let renderHTML = ``
 
-searchBtn.addEventListener("click", function(e){
+searchBtn.addEventListener("click", function (e) {
     e.preventDefault()
-    console.log(Input.value)
+    renderHTML = ``
     fetch(`http://www.omdbapi.com/?apikey=8b639bc0&s=${Input.value}`)
         .then(res => res.json())
         .then(data => {
-            const filmsArray = data.Search.map(film => film.Title)
-            console.log(filmsArray)
+            console.log(Input.value)
+            const filmsSet = new Set(data.Search.map(film => film.Title))
+            //Set allows to store unique values, repeated value will be not added again
+            //However, Set is different to array, so you need to convert it to the array
+            //to use it later
+            const filmsArray = Array.from(filmsSet)
             filmsArray.forEach(film => render(film))
-            document.getElementsByClassName("render")[0].innerHTML = renderHTML
-        Input.value =""
+            Input.value = ""
         })
 })
 
-function render(film){
+function render(film) {
     fetch(`http://www.omdbapi.com/?apikey=8b639bc0&t=${film}`)
         .then(res => res.json())
         .then(filmData => {
             console.log(filmData)
             renderHTML += `
     <div class="film">
-            <img src="${filmData.Poster}" class="img">
+        <img src="${filmData.Poster !== 'N/A' ? filmData.Poster : '/images/no-image.jpeg'}" class="img">
             <div class="info">
                 <div class="head">
                     <h3>${filmData.Title}</h3>
                     <img src="/images/star.png">
-                    <p>${filmData.Ratings[0].Value}</p>
+                    <p>${filmData.Ratings && filmData.Ratings[0] ? filmData.Ratings[0].Value : 'N/A'}</p>
                 </div>
                 <div class="discription">
                     <p>${filmData.Runtime}</p>
@@ -45,6 +48,7 @@ function render(film){
                 </div>
             </div>
         </div>`
+            document.getElementsByClassName("render")[0].innerHTML = renderHTML
         })
 }
 
