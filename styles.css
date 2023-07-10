@@ -41,18 +41,18 @@ header button{
     font-size: 0.875rem; /* 14px */
 }
 
-main, .render{
+.render, .cont{
     width: 34.375em; /* 550px */
     min-height: 35.6875em; /* 571px */
     color: white;
 }
-main{
+.cont{
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-main p{
+.err{
     font-size: 1.125rem; /* 18px */
     font-weight: 700;
     line-height: 1.25em; /* 20px */

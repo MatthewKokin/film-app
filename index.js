@@ -10,14 +10,16 @@ searchBtn.addEventListener("click", function (e) {
     fetch(`http://www.omdbapi.com/?apikey=8b639bc0&s=${Input.value}`)
         .then(res => res.json())
         .then(data => {
-            console.log(Input.value)
-            const filmsSet = new Set(data.Search.map(film => film.Title))
-            //Set allows to store unique values, repeated value will be not added again
-            //However, Set is different to array, so you need to convert it to the array
-            //to use it later
-            const filmsArray = Array.from(filmsSet)
-            filmsArray.forEach(film => render(film))
-            Input.value = ""
+            if (!data.Search) {
+                document.getElementsByClassName("cont")[0].innerHTML = '<p class="err">Unable to find what you’re looking for. Please try another search.</p>'
+                return;
+            } else{
+                const filmsSet = new Set(data.Search.map(film => film.Title))
+                //Set allows to store unique values, repeated value will be not added again. However, Set is different to array, so you need to convert it to the array to use it later
+                const filmsArray = Array.from(filmsSet)
+                filmsArray.forEach(film => render(film))
+                Input.value = ""
+            }
         })
 })
 
