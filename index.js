@@ -30,22 +30,33 @@ searchBtn.addEventListener("click", function (e) {
 
 document.getElementsByClassName("render")[0].addEventListener("click", function(e){
     if(e.target.id === "btn") {
-        console.log(e.target.dataset.uuid)
-        let uuidToRemove = e.target.dataset.uuid; // get the uuid from the event target
+        let uuidToRemove = e.target.dataset.uuid;
         let elementToRemove = document.querySelector(`.film[data-uuid="${uuidToRemove}"]`)
-        watchlistAraay.push(elementToRemove.innerHTML)
-        console.log(watchlistAraay)
-        elementToRemove.remove(); // remove the element from the DOM
-        renderWishList()
+        let filmHTML = elementToRemove.outerHTML;
+        localStorage.setItem(uuidToRemove, filmHTML);
+        elementToRemove.remove();
     }
-})
+});
 
-function renderWishList(){
+
+
+
+function renderWatchList(){
     let watchListElement = document.getElementById("w");
-    if(watchListElement) { // Check if the element exists
-        watchListElement.innerHTML = watchlistAraay.join('');
+    if(watchListElement) {
+        let watchListHTML = '';
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            let filmHTML = localStorage.getItem(key);
+            watchListHTML += filmHTML;
+        }
+        watchListElement.innerHTML = watchListHTML;
     }
 }
+
+// Call the function when the page loads
+renderWatchList();
+
 
 //trying to render saved films to other page
 
